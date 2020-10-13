@@ -29,7 +29,7 @@ public class HomeController {
 		return "result.jsp";
 	}
 	
-	@RequestMapping(value="/new")
+	@RequestMapping(value="/new", method=RequestMethod.GET)
 	private String newJoke() {
 		return "new.jsp";
 	}
