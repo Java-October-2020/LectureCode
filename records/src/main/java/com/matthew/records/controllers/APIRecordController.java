@@ -7,22 +7,24 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.matthew.records.models.Record;
 import com.matthew.records.services.RecordService;
 
 @RestController
-public class RecordController {
+@RequestMapping("/api")
+public class APIRecordController {
 	private RecordService rService;
 	
-	public RecordController(RecordService service) {
+	public APIRecordController(RecordService service) {
 		this.rService = service;
 	}
 	
 	
 	// Endpoints
-	@GetMapping("/")
+	@GetMapping("")
 	public List<Record> index(){
 		return this.rService.getAllRecords();
 	}
@@ -37,7 +39,7 @@ public class RecordController {
 		return this.rService.updateRecord(updatedRecord);
 	}
 	
-	@PostMapping("/")
+	@PostMapping("")
 	public Record create(Record newRecord) {
 		return this.rService.createRecord(newRecord);
 	}

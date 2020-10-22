@@ -30,6 +30,11 @@ public class RecordService {
 		return this.rRepo.save(newRecord);
 	}
 	
+	public Record createRecord(String name, String album, int year) {
+		Record newRecord = new Record(name, album, year);
+		return this.rRepo.save(newRecord);
+	}
+	
 	// Update Record
 	public Record updateRecord(Record updatedRecord) {
 		return this.rRepo.save(updatedRecord);
