@@ -2,11 +2,14 @@ package com.matthew.records.models;
 
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
@@ -28,6 +31,10 @@ public class Record {
 	private String albumName;
 	@NotNull
 	private int year;
+	
+	@OneToOne(mappedBy="record", cascade=CascadeType.ALL, fetch=FetchType.LAZY)
+	private Label label;
+	
 	@Column(updatable=false)
 	@DateTimeFormat(pattern = "yyy-MM-DD HH:mm:ss")
 	private Date createdAt;
@@ -104,6 +111,14 @@ public class Record {
 
 	public void setUpdatedAt(Date updatedAt) {
 		this.updatedAt = updatedAt;
+	}
+
+	public Label getLabel() {
+		return label;
+	}
+
+	public void setLabel(Label label) {
+		this.label = label;
 	}
 	
 	

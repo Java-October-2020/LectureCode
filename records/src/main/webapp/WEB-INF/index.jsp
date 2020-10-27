@@ -22,7 +22,7 @@
 <tr>
 <td>${record.id}</td>
 <td>${record.artistName}</td>
-<td>${record.albumName}</td>
+<td><a href="/${record.id}">${record.albumName}</a></td>
 <td>${record.year }</td>
 </tr>
 </c:forEach>

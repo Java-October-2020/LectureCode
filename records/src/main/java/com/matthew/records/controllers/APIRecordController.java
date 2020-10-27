@@ -34,6 +34,7 @@ public class APIRecordController {
 		return this.rService.getOneRecord(id);
 	}
 	
+	@RequestMapping(value="/record/update/{id}" )
 	@PutMapping("/record/update/{id}")
 	public Record edit(@PathVariable("id") Long id, Record updatedRecord) {
 		return this.rService.updateRecord(updatedRecord);
