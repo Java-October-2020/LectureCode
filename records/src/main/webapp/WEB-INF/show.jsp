@@ -16,7 +16,15 @@
 <p>Artist: ${record.artistName }
 <p>Year Released ${record.year}</p>
 
+<c:if test="${record.songs != null }">
+<h2>Track Listings</h2>
+<ol>
+<c:forEach items="${record.songs}" var="song">
+<li>${song.title} - ${song.length}</li>
 
+</c:forEach>
+</ol>
+</c:if>
 
 
 <c:choose>

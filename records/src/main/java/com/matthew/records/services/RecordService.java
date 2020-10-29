@@ -27,13 +27,10 @@ public class RecordService {
 	
 	// Create Record
 	public Record createRecord(Record newRecord) {
+		System.out.println("Service received the record, sending to repository to save to DB");
 		return this.rRepo.save(newRecord);
 	}
 	
-	public Record createRecord(String name, String album, int year) {
-		Record newRecord = new Record(name, album, year);
-		return this.rRepo.save(newRecord);
-	}
 	
 	// Update Record
 	public Record updateRecord(Record updatedRecord) {

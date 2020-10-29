@@ -40,28 +40,29 @@ public class HomeController {
 	
 	
 	//Non JPA Way
-	@PostMapping("/addOldWay")
-	public String addAlbum(@RequestParam("artistName") String name, @RequestParam("albumName") String album, @RequestParam("year") int year, RedirectAttributes redirectAttrs) {
-		ArrayList<String> errors = new ArrayList<String>();
-		if(name.equals("")) {
-			errors.add("Hey there, you forgot to add an artist name");
-		}
-		if(errors.size() > 0) {
-			for(String e: errors) {
-				redirectAttrs.addFlashAttribute("errors", e);
-			}
-			return "redirect:/add";
-		}
-		
-		this.rService.createRecord(name, album, year);
-		return "redirect:/";
-	}
+//	@PostMapping("/addOldWay")
+//	public String addAlbum(@RequestParam("artistName") String name, @RequestParam("albumName") String album, @RequestParam("year") int year, RedirectAttributes redirectAttrs) {
+//		ArrayList<String> errors = new ArrayList<String>();
+//		if(name.equals("")) {
+//			errors.add("Hey there, you forgot to add an artist name");
+//		}
+//		if(errors.size() > 0) {
+//			for(String e: errors) {
+//				redirectAttrs.addFlashAttribute("errors", e);
+//			}
+//			return "redirect:/add";
+//		}
+//		
+//		this.rService.createRecord(name, album, year);
+//		return "redirect:/";
+//	}
 	
 	@PostMapping("/add")
 	public String addNewAlbum(@Valid @ModelAttribute("record") Record newRecord, BindingResult result) {
 		if(result.hasErrors()) {
 			return "add.jsp";
 		} else {
+			System.out.println("Controller. Created Object, Sending to Service.");
 			this.rService.createRecord(newRecord);
 			return "redirect:/";
 		}

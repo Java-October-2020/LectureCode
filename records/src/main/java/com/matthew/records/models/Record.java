@@ -1,6 +1,7 @@
 package com.matthew.records.models;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -9,6 +10,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
@@ -32,6 +34,9 @@ public class Record {
 	@NotNull
 	private int year;
 	
+    @OneToMany(mappedBy="record", cascade=CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Song> songs;
+	
 	@OneToOne(mappedBy="record", cascade=CascadeType.ALL, fetch=FetchType.LAZY)
 	private Label label;
 	
@@ -54,15 +59,6 @@ public class Record {
 	
 	public Record() {
 
-	}
-	
-	
-
-	public Record(String artistName, String albumName, int year) {
-		super();
-		this.artistName = artistName;
-		this.albumName = albumName;
-		this.year = year;
 	}
 
 	public Long getId() {
@@ -119,6 +115,14 @@ public class Record {
 
 	public void setLabel(Label label) {
 		this.label = label;
+	}
+
+	public List<Song> getSongs() {
+		return songs;
+	}
+
+	public void setSongs(List<Song> songs) {
+		this.songs = songs;
 	}
 	
 	

@@ -10,9 +10,12 @@
 </head>
 <body>
 <div class="container">
+
+<h2>The Best Official Record Collection</h2>
+<a href="/add">Add Record To Collection</a> | </a><a href="/songs/new">Add Song To Album!</a>
+<hr>
 <table class="table table-dark">
 <thead>
-	<th>id</th>
 	<th>Artist Name</th>
 	<th>Album Name</th>
 	<th>Year</th>
@@ -20,7 +23,6 @@
 <tbody>
 <c:forEach items="${allRecords}" var="record">
 <tr>
-<td>${record.id}</td>
 <td>${record.artistName}</td>
 <td><a href="/${record.id}">${record.albumName}</a></td>
 <td>${record.year }</td>
