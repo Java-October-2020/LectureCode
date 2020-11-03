@@ -16,7 +16,7 @@
 </c:forEach>
 
 
-<form:form method="POST" action="/add" modelAttribute="record">
+<form:form method="POST" action="/dashboard/add" modelAttribute="record">
 	<div class="form-group">
 	<form:label path="artistName">Artist Name:
 	<form:errors path="artistName"/>

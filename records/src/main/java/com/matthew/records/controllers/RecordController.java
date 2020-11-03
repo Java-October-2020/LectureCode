@@ -1,8 +1,8 @@
 package com.matthew.records.controllers;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,27 +14,38 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.matthew.records.models.Label;
 import com.matthew.records.models.Record;
+import com.matthew.records.models.User;
 import com.matthew.records.services.LabelService;
 import com.matthew.records.services.RecordService;
+import com.matthew.records.services.UserService;
 
 
 @Controller
-public class HomeController {
+@RequestMapping("/dashboard")
+public class RecordController {
 	@Autowired
 	private RecordService rService;
 	@Autowired
 	private LabelService lService;
+	@Autowired
+	private UserService uService;
 	
-	@GetMapping("/")
-	public String index(Model viewModel) {
+	@GetMapping("")
+	public String index(Model viewModel, HttpSession session, RedirectAttributes redirectAttr) {
+		if(session.getAttribute("user_id") == null) {
+			redirectAttr.addFlashAttribute("error", "Must be logged in to view that!");
+			return "redirect:/";
+		}
+		Long userId = (Long)session.getAttribute("user_id");
+		System.out.println(userId);
+		User user = this.uService.findOneUser(userId);
 		List<Record> records = this.rService.getAllRecords();
 		viewModel.addAttribute("allRecords", records);
+		viewModel.addAttribute("user", user);
 		return "index.jsp";
 	}
 	
@@ -62,7 +73,6 @@ public class HomeController {
 		if(result.hasErrors()) {
 			return "add.jsp";
 		} else {
-			System.out.println("Controller. Created Object, Sending to Service.");
 			this.rService.createRecord(newRecord);
 			return "redirect:/";
 		}
@@ -92,15 +102,51 @@ public class HomeController {
 		}
 	}
 	
-	@RequestMapping(value="/{id}", method=RequestMethod.PUT)
-	public String updateRecord(@Valid @ModelAttribute("record") Record updatedRecord, BindingResult result) {
+	//@PutMapping
+//	@RequestMapping(value="/{id}", method=RequestMethod.PUT)
+//	public String updateRecord(@Valid @ModelAttribute("record") Record updatedRecord, BindingResult result) {
+//		if(result.hasErrors()) {
+//			return "show.jsp";
+//		} else {
+//			this.rService.updateRecord(updatedRecord);
+//			return "redirect:/";
+//		}
+//	}
+	
+	@PostMapping("/{id}")
+	public String updateRecord(@Valid @ModelAttribute("record") Record updatedRecord, BindingResult result, @ModelAttribute("label") Label label) {
 		if(result.hasErrors()) {
 			return "show.jsp";
 		} else {
 			this.rService.updateRecord(updatedRecord);
-			return "redirect:/";
 		}
+		return "redirect:/";
 	}
 	
+	@GetMapping("/delete/{id}")
+	public String deleteRecord(@PathVariable("id") Long id) {
+		this.rService.deleteRecord(id);
+		return "redirect:/";
+	}
+	
+	@GetMapping("/like/{id}")
+	public String like(@PathVariable("id") Long id, HttpSession session) {
+		Long userId = (Long)session.getAttribute("user_id");
+		Long recordID = id;
+		User liker = this.uService.findOneUser(userId);
+		Record likedRecord = this.rService.getOneRecord(recordID);
+		this.rService.addLiker(liker, likedRecord);
+		return "redirect:/dashboard";
+	}
+	
+	@GetMapping("/unlike/{id}")
+	public String unlike(@PathVariable("id") Long id, HttpSession session) {
+		Long userId = (Long)session.getAttribute("user_id");
+		Long recordID = id;
+		User unliker = this.uService.findOneUser(userId);
+		Record unlikedRecord = this.rService.getOneRecord(recordID);
+		this.rService.removeLiker(unliker, unlikedRecord);
+		return "redirect:/dashboard";
+	}
 	
 }

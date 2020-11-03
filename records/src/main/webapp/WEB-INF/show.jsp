@@ -15,7 +15,13 @@
 <h3>Details for ${record.albumName}</h3>
 <p>Artist: ${record.artistName }
 <p>Year Released ${record.year}</p>
-
+<hr>
+<h3>Liked By</h3>
+<ol>
+<c:forEach items="${record.likers}" var="user">
+<li>${user.firstName} ${user.lastName}</li>
+</c:forEach>
+</ol>
 <c:if test="${record.songs != null }">
 <h2>Track Listings</h2>
 <ol>
@@ -35,7 +41,7 @@
 </c:when>
 <c:otherwise>
 <h2>New Label Registration</h2>
-<form:form method="POST" action="/label" modelAttribute="label">
+<form:form method="POST" action="/dashboard/label" modelAttribute="label">
 <form:hidden path="record" value="${record.id}"/>
 <p>
 <form:label path="name">Name:
@@ -59,8 +65,8 @@
 
 <hr>
 <h3>Edit Record</h3>
-<form:form method="POST" action="/${record.id}" modelAttribute="record">
-	<input type="hidden" name="_method" value="put">
+<form:form method="POST" action="/dashboiard/${record.id}" modelAttribute="record">
+
 	<div class="form-group">
 	<form:label path="artistName">Artist Name:
 	<form:errors path="artistName"/>
@@ -78,6 +84,8 @@
 	</div>
 	<button>Update Record</button>
 </form:form>
+
+<a href="/delete/${record.id}" class="btn btn-danger">Delete</a>
 
 </div>
 </body>

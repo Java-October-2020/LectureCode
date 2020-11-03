@@ -10,6 +10,9 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
@@ -32,7 +35,15 @@ public class Record {
 	@NotBlank
 	private String albumName;
 	@NotNull
-	private int year;
+	private String year;
+	
+	@ManyToMany
+	@JoinTable(
+		name="likes",
+		joinColumns = @JoinColumn(name="record_id"),
+		inverseJoinColumns = @JoinColumn(name="user_id")			
+			)
+	private List<User> likers;
 	
     @OneToMany(mappedBy="record", cascade=CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Song> songs;
@@ -85,13 +96,7 @@ public class Record {
 		this.albumName = albumName;
 	}
 
-	public int getYear() {
-		return year;
-	}
 
-	public void setYear(int year) {
-		this.year = year;
-	}
 
 	public Date getCreatedAt() {
 		return createdAt;
@@ -124,7 +129,24 @@ public class Record {
 	public void setSongs(List<Song> songs) {
 		this.songs = songs;
 	}
-	
+
+	public String getYear() {
+		return year;
+	}
+
+	public void setYear(String year) {
+		this.year = year;
+	}
+
+	public List<User> getLikers() {
+		return likers;
+	}
+
+	public void setLikers(List<User> likers) {
+		this.likers = likers;
+	}
+
+
 	
 	
 	
