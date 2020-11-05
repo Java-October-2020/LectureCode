@@ -1,37 +1,55 @@
 package com.matthew.records.controllers;
 
-import java.util.List;
-
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.matthew.records.models.User;
 import com.matthew.records.services.UserService;
+import com.matthew.records.validators.UserValidator;
 
 @Controller
 public class UserController {
 	@Autowired
 	private UserService uService;
-	
+	@Autowired
+	private UserValidator validator;
 	
 	@RequestMapping("/")
-	public String index(Model viewModel) {
-		List<User> users = this.uService.allUsers();
-		viewModel.addAttribute("users", users);
+	public String index(@ModelAttribute("user") User user) {
+
 		return "landing.jsp";
 	}
 	
-	@PostMapping("/login")
-	public String login(HttpSession session, Model viewModel, @RequestParam("users") Long id) {
-		if(session.getAttribute("user_id") == null){
-			session.setAttribute("user_id", id);
+	@PostMapping("/register")
+	public String register(@Valid @ModelAttribute("user") User user, BindingResult result, HttpSession session) {
+		validator.validate(user, result);
+		if(result.hasErrors()) {
+			//If there are validation errors:
+			// We want to return them directly to the registration page
+			return "landing.jsp";
 		}
+		User newUser = this.uService.registerUser(user);
+		session.setAttribute("user_id", newUser.getId());
+		return "redirect:/dashboard";
+	}
+	
+	@PostMapping("/login")
+	public String login(@RequestParam("lemail") String email, @RequestParam("lpassword") String password, RedirectAttributes redirectAttrs, HttpSession session) {
+		if(!this.uService.authenicateUser(email, password)) {
+			redirectAttrs.addFlashAttribute("loginError", "Invalid Credentials");
+			return "redirect:/";
+		}
+		User user = this.uService.getByEmail(email);
+		session.setAttribute("user_id", user.getId());
 		return "redirect:/dashboard";
 	}
 	

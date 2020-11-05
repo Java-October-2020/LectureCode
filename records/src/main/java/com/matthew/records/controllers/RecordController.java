@@ -35,9 +35,9 @@ public class RecordController {
 	private UserService uService;
 	
 	@GetMapping("")
-	public String index(Model viewModel, HttpSession session, RedirectAttributes redirectAttr) {
+	public String index(Model viewModel, HttpSession session) {
 		if(session.getAttribute("user_id") == null) {
-			redirectAttr.addFlashAttribute("error", "Must be logged in to view that!");
+
 			return "redirect:/";
 		}
 		Long userId = (Long)session.getAttribute("user_id");
