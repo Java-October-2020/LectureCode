@@ -15,6 +15,7 @@
 <h3>Details for ${record.albumName}</h3>
 <p>Artist: ${record.artistName }
 <p>Year Released ${record.year}</p>
+<p>Added By: <a href="/dashboard/profile/${record.creator.id}">${record.creator.firstName}</a></p>
 <hr>
 <h3>Liked By</h3>
 <ol>
@@ -64,6 +65,8 @@
 </c:choose>
 
 <hr>
+
+<c:if test="${record.creator.id == user_id }">
 <h3>Edit Record</h3>
 <form:form method="POST" action="/dashboiard/${record.id}" modelAttribute="record">
 
@@ -85,7 +88,10 @@
 	<button>Update Record</button>
 </form:form>
 
+
 <a href="/delete/${record.id}" class="btn btn-danger">Delete</a>
+</c:if>
+
 
 </div>
 </body>

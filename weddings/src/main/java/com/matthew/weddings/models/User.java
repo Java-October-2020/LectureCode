@@ -1,4 +1,5 @@
-package com.matthew.records.models;
+package com.matthew.weddings.models;
+
 
 import java.util.List;
 
@@ -22,7 +23,7 @@ import javax.validation.constraints.Size;
 @Table(name="users")
 public class User {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	@NotBlank
 	@Size(max=15)
@@ -33,70 +34,87 @@ public class User {
 	@Email
 	@NotBlank
 	private String email;
-	@NotBlank
 	private String password;
 	@Transient
-	private String confirmPassword;	
-	@OneToMany(mappedBy="creator", cascade=CascadeType.ALL, fetch=FetchType.LAZY)
-	private List<Record> records;
+	private String confirmPassword;
+	@OneToMany(mappedBy="planner", cascade=CascadeType.ALL, fetch=FetchType.LAZY)
+	private List<Wedding> weddings;
 	@ManyToMany(fetch=FetchType.LAZY)
 	@JoinTable(
-			name="likes",
-			joinColumns = @JoinColumn(name="user_id"),
-			inverseJoinColumns= @JoinColumn(name="record_id")
-			)
-	private List<Record> recordsLiked;
+		name="attendees",
+		joinColumns = @JoinColumn(name="user_id"),
+		inverseJoinColumns = @JoinColumn(name="wedding_id")	
+		)
+	private List<Wedding> rsvps;
 	
 	public User() {
+		
 	}
+
 	public Long getId() {
 		return id;
 	}
+
 	public void setId(Long id) {
 		this.id = id;
 	}
+
 	public String getFirstName() {
 		return firstName;
 	}
+
 	public void setFirstName(String firstName) {
 		this.firstName = firstName;
 	}
+
 	public String getLastName() {
 		return lastName;
 	}
+
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
-	public List<Record> getRecordsLiked() {
-		return recordsLiked;
-	}
-	public void setRecordsLiked(List<Record> recordsLiked) {
-		this.recordsLiked = recordsLiked;
-	}
+
 	public String getEmail() {
 		return email;
 	}
+
 	public void setEmail(String email) {
 		this.email = email;
 	}
+
 	public String getPassword() {
 		return password;
 	}
+
 	public void setPassword(String password) {
 		this.password = password;
 	}
+
 	public String getConfirmPassword() {
 		return confirmPassword;
 	}
+
 	public void setConfirmPassword(String confirmPassword) {
 		this.confirmPassword = confirmPassword;
 	}
-	public List<Record> getRecords() {
-		return records;
+
+	public List<Wedding> getWeddings() {
+		return weddings;
 	}
-	public void setRecords(List<Record> records) {
-		this.records = records;
+
+	public void setWeddings(List<Wedding> weddings) {
+		this.weddings = weddings;
 	}
+
+	public List<Wedding> getRsvps() {
+		return rsvps;
+	}
+
+	public void setRsvps(List<Wedding> rsvps) {
+		this.rsvps = rsvps;
+	}
+
 	
 	
 }

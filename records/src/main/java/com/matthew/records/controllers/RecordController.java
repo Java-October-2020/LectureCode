@@ -9,12 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.matthew.records.models.Label;
 import com.matthew.records.models.Record;
@@ -41,7 +41,6 @@ public class RecordController {
 			return "redirect:/";
 		}
 		Long userId = (Long)session.getAttribute("user_id");
-		System.out.println(userId);
 		User user = this.uService.findOneUser(userId);
 		List<Record> records = this.rService.getAllRecords();
 		viewModel.addAttribute("allRecords", records);
@@ -69,32 +68,40 @@ public class RecordController {
 //	}
 	
 	@PostMapping("/add")
-	public String addNewAlbum(@Valid @ModelAttribute("record") Record newRecord, BindingResult result) {
+	public String addNewAlbum(@Valid @ModelAttribute("record") Record newRecord, BindingResult result, Record record, Model viewModel, HttpSession session) {
 		if(result.hasErrors()) {
+			Long userID = (Long)session.getAttribute("user_id");
+			viewModel.addAttribute("user_id", userID);
 			return "add.jsp";
 		} else {
 			this.rService.createRecord(newRecord);
-			return "redirect:/";
+			return "redirect:/dashboard";
 		}
 	}
 	
 	@GetMapping("/add")
-	public String add(@ModelAttribute("record") Record record) {
+	public String add(@ModelAttribute("record") Record record, Model viewModel, HttpSession session) {
+		Long userID = (Long)session.getAttribute("user_id");
+		viewModel.addAttribute("user_id", userID);
 		return "add.jsp";
 	}
 	
 	
 	@GetMapping("/{id}")
-	public String showRecord(@PathVariable("id") Long id, Model viewModel, @ModelAttribute("record") Record record, @ModelAttribute("label") Label label) {
+	public String showRecord(@PathVariable("id") Long id, Model viewModel, @ModelAttribute("record") Record record, @ModelAttribute("label") Label label, HttpSession session) {
+		Long userId = (Long)session.getAttribute("user_id");
 		viewModel.addAttribute("record", this.rService.getOneRecord(id));
+		viewModel.addAttribute("user_id", userId);
 		return "show.jsp";
 	}
 	
 	
 	@PostMapping("/label")
-	public String createLabel(@Valid @ModelAttribute("label") Label label, BindingResult result, Model viewModel) {
-
+	public String createLabel(@Valid @ModelAttribute("label") Label label, BindingResult result, Model viewModel, HttpSession session) {
+		Long userID = (Long)session.getAttribute("user_id");
 		if(result.hasErrors()) {
+			viewModel.addAttribute("record", this.rService.getOneRecord(label.getRecord().getId()));
+			viewModel.addAttribute("user_id", userID);
 			return "show.jsp";
 		} else {
 			this.lService.create(label);
@@ -129,6 +136,7 @@ public class RecordController {
 		return "redirect:/";
 	}
 	
+	
 	@GetMapping("/like/{id}")
 	public String like(@PathVariable("id") Long id, HttpSession session) {
 		Long userId = (Long)session.getAttribute("user_id");
@@ -149,4 +157,9 @@ public class RecordController {
 		return "redirect:/dashboard";
 	}
 	
+	@GetMapping("/profile/{id}")
+	public String userProfile(@PathVariable("id") Long id, Model viewModel) {
+		viewModel.addAttribute("user", this.uService.findOneUser(id));
+		return "profile.jsp";
+	}
 }

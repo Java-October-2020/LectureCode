@@ -17,6 +17,7 @@
 
 
 <form:form method="POST" action="/dashboard/add" modelAttribute="record">
+	<form:input type="hidden" path="creator" value="${user_id}"/>
 	<div class="form-group">
 	<form:label path="artistName">Artist Name:
 	<form:errors path="artistName"/>
