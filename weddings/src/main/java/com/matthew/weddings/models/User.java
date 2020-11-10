@@ -41,10 +41,10 @@ public class User {
 	private List<Wedding> weddings;
 	@ManyToMany(fetch=FetchType.LAZY)
 	@JoinTable(
-		name="attendees",
-		joinColumns = @JoinColumn(name="user_id"),
-		inverseJoinColumns = @JoinColumn(name="wedding_id")	
-		)
+			name="guestlist",
+			joinColumns = @JoinColumn(name="user_id"),
+			inverseJoinColumns = @JoinColumn(name="wedding_id")
+	)
 	private List<Wedding> rsvps;
 	
 	public User() {

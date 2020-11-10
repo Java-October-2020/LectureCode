@@ -38,10 +38,10 @@ public class Wedding {
 	private User planner;
 	@ManyToMany(fetch=FetchType.LAZY)
 	@JoinTable(
-		name="attendees",
-		joinColumns = @JoinColumn(name="wedding_id"),
-		inverseJoinColumns = @JoinColumn(name="user_id")	
-		)
+			name="guestlist",
+			joinColumns = @JoinColumn(name="wedding_id"),
+			inverseJoinColumns = @JoinColumn(name="user_id")
+	)
 	private List<User> guests;
 	public Long getId() {
 		return id;

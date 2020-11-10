@@ -59,7 +59,7 @@ public class WeddingController {
 		Long weddingId = id;
 		User rsvper = this.uService.find(userId);
 		Wedding attendedWedding = this.wService.getById(weddingId);
-		this.wService.addAttendee(attendedWedding, rsvper);
+		this.wService.addAttendee(rsvper, attendedWedding);
 		return "redirect:/wedding";
 	}
 	

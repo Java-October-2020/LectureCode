@@ -30,7 +30,7 @@ public class WeddingService {
 	}
 	
 	// RSVP To Wedding
-	public void addAttendee(Wedding wedding, User user) {
+	public void addAttendee(User user, Wedding wedding) {
 		List<User> attendees = wedding.getGuests();
 		// Add the User to the Wedding Guests
 		attendees.add(user);
