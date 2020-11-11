@@ -29,6 +29,11 @@ public class WeddingService {
 		return this.wRepo.save(wedding);
 	}
 	
+	// Update Wedding
+	public Wedding update(Wedding wedding) {
+		return this.wRepo.save(wedding);
+	}
+	
 	// RSVP To Wedding
 	public void addAttendee(User user, Wedding wedding) {
 		List<User> attendees = wedding.getGuests();
@@ -45,5 +50,10 @@ public class WeddingService {
 		attendees.remove(user);
 		//Update
 		this.wRepo.save(wedding);
+	}
+	
+	// Delete Wedding
+	public void deleteWedding(Wedding wedding) {
+		this.wRepo.delete(wedding);
 	}
 }
