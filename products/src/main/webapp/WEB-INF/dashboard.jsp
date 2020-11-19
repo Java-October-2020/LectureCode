@@ -26,7 +26,18 @@
 <tr>
 
 <td><a href="/product/${product.id}">${product.name}</td>
-<td>Rating goes here</td>
+<td>
+<c:set var="avg" value="${0}"/>
+<c:forEach items="${product.ratings}" var="rating">
+<c:if test="${product.ratings.size() != 0 }">
+<c:set var="avg" value="${avg + rating.rating}"/>
+</c:if>
+</c:forEach>
+<c:if test="${avg > 0 }">
+<c:set var="avg" value="${avg / product.ratings.size() }"/>
+</c:if>
+<c:out value="${avg}"/>
+</td>
 </tr>
 </c:forEach>
 </tbody>

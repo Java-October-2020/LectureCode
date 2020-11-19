@@ -134,10 +134,6 @@ public class MainController {
 		Long userId = (Long)session.getAttribute("user_id");
 		User user = this.uService.findOneUser(userId);
 		viewModel.addAttribute("user", user);
-		List<Rating> ratingz = product.getRatings();
-		for(Rating r : ratingz) {
-			System.out.println(r.getUser().getFirstName());
-		}
 		return "/products/show.jsp";
 	}
 	

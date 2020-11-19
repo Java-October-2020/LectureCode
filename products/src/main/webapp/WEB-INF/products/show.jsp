@@ -56,13 +56,30 @@ No Categories have been added
 <button>Add Category</button>
 </form>
 <hr>
-<c:if test="${product.ratings.contains(user) }">
 
+
+<c:set var="found" value="false"/>
+<c:forEach items="${product.ratings}" var="rating">
+<c:if test="${rating.user == user }">
+<c:set var="found" value="true"/>
+You Rated This Item: <c:out value="${rating.rating }"/>
+</c:if>
+</c:forEach>
+
+<c:if test="${found == false}">
 <h1>Add A Rating</h1>
 <form method="post" action="/product/rate/${product.id}">
 <input type="text" name="rating">
 <button>Add Rating!</button>
 </form>
+</c:if>
+
+
+
+
+<c:if test="${product.ratings.contains(rating.user) }">
+
+
 
 </c:if>
 
