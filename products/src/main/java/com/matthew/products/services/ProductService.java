@@ -33,7 +33,21 @@ public class ProductService {
 		return this.pRepo.save(product);
 	}
 	
+	// Get Unique Categories
 	public List<Product> getUniqueCats(Category category){
 		return this.pRepo.findByCategoriesNotContains(category);
 	}
+	
+	// Add Product To Category
+	public void addProductToCat(Product product, Category category) {
+		// Get The List From the Product Object
+		List<Category> cats = product.getCategories();
+		// Add The Category
+		cats.add(category);
+		// Update
+		this.pRepo.save(product);
+	}
+	
+
+	
 }

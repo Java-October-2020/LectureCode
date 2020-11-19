@@ -2,6 +2,7 @@ package com.matthew.products.models;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -10,6 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -21,6 +24,8 @@ public class Product {
 	private String name;
 	private String description;
 	private double price;
+	@OneToMany(mappedBy="product", fetch = FetchType.LAZY, cascade=CascadeType.ALL)
+	private List<Rating> ratings;
 	@ManyToMany(fetch=FetchType.LAZY)
 	@JoinTable(
 			name="associated",
@@ -28,6 +33,10 @@ public class Product {
 			inverseJoinColumns = @JoinColumn(name="category_id")
 			)
 	private List<Category> categories;
+
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="user_id")
+    private User creator;
 	public Product() {
 
 	}
@@ -60,5 +69,18 @@ public class Product {
 	}
 	public void setCategories(List<Category> categories) {
 		this.categories = categories;
+	}
+
+	public User getCreator() {
+		return creator;
+	}
+	public void setCreator(User creator) {
+		this.creator = creator;
+	}
+	public List<Rating> getRatings() {
+		return ratings;
+	}
+	public void setRatings(List<Rating> ratings) {
+		this.ratings = ratings;
 	}
 }
